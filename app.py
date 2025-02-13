@@ -1,10 +1,9 @@
 from flask import Flask, render_template, request
+from flask_cors import CORS
 import cv2
-import logging
 
-
-logging.basicConfig(level=logging.DEBUG)
 app = Flask(__name__, static_folder="static", template_folder=".")
+CORS(app, resources={r"/*": {"origins": "https://niveshpai.github.io"}})  # Allow only GitHub Pages domain
 
 # Character encoding dictionaries
 d = {chr(i): i for i in range(255)}
@@ -33,7 +32,7 @@ def encrypt_image(image_path, message, password):
         m += 1
         z = (z + 1) % 3
 
-    encrypted_path = "/app/static/encrypted.png"
+    encrypted_path = "static/encrypted.png"
     cv2.imwrite(encrypted_path, img)
     return encrypted_path
 
@@ -67,10 +66,6 @@ def decrypt_image(image_path, entered_password):
 
     return secret_message
 
-
-@app.route("/")
-def index():
-    return render_template("index.html")
 
 @app.route("/encrypt", methods=["POST"])
 def encrypt():
