@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 import cv2
 
-app = Flask(__name__, static_folder="static", template_folder="templates")
+app = Flask(__name__, static_folder="static", template_folder=".")
 
 # Character encoding dictionaries
 d = {chr(i): i for i in range(255)}
@@ -67,7 +67,7 @@ def decrypt_image(image_path, entered_password):
 
 @app.route("/")
 def index():
-    return render_template("/index.html")
+    return render_template("index.html")
 
 @app.route("/encrypt", methods=["POST"])
 def encrypt():
