@@ -21,7 +21,8 @@
         <input type="password" id="encryptPassword" placeholder="Enter password" required><br>
         <button type="submit">Encrypt</button>
     </form>
-    <img id="encryptedImage" style="display:none;" alt="Encrypted Image">
+    <img id="encryptedImage" src="{{ url_for('static', filename='encrypted.png') }}" alt="Encrypted Image" style="display:none;">
+
 
     <h3>Decrypt Message</h3>
     <form id="decryptForm">

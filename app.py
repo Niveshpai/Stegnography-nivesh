@@ -1,7 +1,14 @@
 from flask import Flask, render_template, request
-import cv2
+import cv2, app
+import logging
+from flask_cors import CORS
 
+
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB
+
+logging.basicConfig(level=logging.DEBUG)
 app = Flask(__name__, static_folder="static", template_folder=".")
+CORS(app) 
 
 # Character encoding dictionaries
 d = {chr(i): i for i in range(255)}
@@ -30,7 +37,7 @@ def encrypt_image(image_path, message, password):
         m += 1
         z = (z + 1) % 3
 
-    encrypted_path = "static/encrypted.png"
+    encrypted_path = "/app/static/encrypted.png"
     cv2.imwrite(encrypted_path, img)
     return encrypted_path
 
@@ -77,12 +84,20 @@ def encrypt():
 
     if image:
         image_path = "static/uploaded.png"
-        image.save(image_path)
+        try:
+            image.save(image_path)
+            logging.debug(f"Image saved at {image_path}")
+        except Exception as e:
+            logging.error(f"Error saving image: {e}")
+            return {"status": "error", "message": "Failed to save image"}
+
         encrypted_path = encrypt_image(image_path, message, password)
         if encrypted_path:
+            logging.debug(f"Encrypted image saved at {encrypted_path}")
             return {"status": "success", "encrypted_image": encrypted_path}
-    
-    return {"status": "error", "message": "Encryption failed"}
+        else:
+            logging.error("Encryption failed")
+            return {"status": "error", "message": "Encryption failed"}
 
 @app.route("/decrypt", methods=["POST"])
 def decrypt():
