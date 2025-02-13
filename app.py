@@ -1,14 +1,10 @@
 from flask import Flask, render_template, request
-import cv2, app
+import cv2
 import logging
-from flask_cors import CORS
 
-
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB
 
 logging.basicConfig(level=logging.DEBUG)
 app = Flask(__name__, static_folder="static", template_folder=".")
-CORS(app) 
 
 # Character encoding dictionaries
 d = {chr(i): i for i in range(255)}
