@@ -38,8 +38,8 @@
             formData.append("image", document.getElementById("encryptImage").files[0]);
             formData.append("message", document.getElementById("message").value);
             formData.append("password", document.getElementById("encryptPassword").value);
-
-            fetch("/encrypt", { method: "POST", body: formData })
+    
+            fetch("https://stegnography-nivesh.onrender.com/encrypt", { method: "POST", body: formData })
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === "success") {
@@ -51,14 +51,14 @@
                     }
                 });
         });
-
+    
         document.getElementById("decryptForm").addEventListener("submit", function(event) {
             event.preventDefault();
             let formData = new FormData();
             formData.append("image", document.getElementById("decryptImage").files[0]);
             formData.append("password", document.getElementById("decryptPassword").value);
-
-            fetch("/decrypt", { method: "POST", body: formData })
+    
+            fetch("https://stegnography-nivesh.onrender.com/decrypt", { method: "POST", body: formData })
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === "success") {
@@ -69,6 +69,7 @@
                 });
         });
     </script>
+    
 
 </body>
 </html>
