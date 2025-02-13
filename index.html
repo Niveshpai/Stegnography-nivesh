@@ -1,76 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Image Steganography</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-        input, button { margin: 10px; padding: 8px; }
-        img { max-width: 100%; height: auto; margin-top: 10px; }
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 20px;
+      }
+      input,
+      button {
+        margin: 10px;
+        padding: 8px;
+      }
+      img {
+        max-width: 100%;
+        height: auto;
+        margin-top: 10px;
+      }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <h2>Image Steganography</h2>
 
     <h3>Encrypt Message</h3>
     <form id="encryptForm">
-        <input type="file" id="encryptImage" required><br>
-        <input type="text" id="message" placeholder="Enter secret message" required><br>
-        <input type="password" id="encryptPassword" placeholder="Enter password" required><br>
-        <button type="submit">Encrypt</button>
+      <input type="file" id="encryptImage" required /><br />
+      <input
+        type="text"
+        id="message"
+        placeholder="Enter secret message"
+        required
+      /><br />
+      <input
+        type="password"
+        id="encryptPassword"
+        placeholder="Enter password"
+        required
+      /><br />
+      <button type="submit">Encrypt</button>
     </form>
-    <img id="encryptedImage" src="{{ url_for('static', filename='encrypted.png') }}" alt="Encrypted Image" style="display:none;">
-
+    <img
+      id="encryptedImage"
+      src="{{ url_for('static', filename='encrypted.png') }}"
+      alt="Encrypted Image"
+      style="display: none"
+    />
 
     <h3>Decrypt Message</h3>
     <form id="decryptForm">
-        <input type="file" id="decryptImage" required><br>
-        <input type="password" id="decryptPassword" placeholder="Enter password" required><br>
-        <button type="submit">Decrypt</button>
+      <input type="file" id="decryptImage" required /><br />
+      <input
+        type="password"
+        id="decryptPassword"
+        placeholder="Enter password"
+        required
+      /><br />
+      <button type="submit">Decrypt</button>
     </form>
     <p id="decryptedMessage"></p>
 
     <script>
-        document.getElementById("encryptForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-            let formData = new FormData();
-            formData.append("image", document.getElementById("encryptImage").files[0]);
-            formData.append("message", document.getElementById("message").value);
-            formData.append("password", document.getElementById("encryptPassword").value);
-    
-            fetch("https://stegnography-nivesh.onrender.com/encrypt", { method: "POST", body: formData })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === "success") {
-                        let img = document.getElementById("encryptedImage");
-                        img.src = data.encrypted_image;
-                        img.style.display = "block";
-                    } else {
-                        alert("Encryption failed!");
-                    }
-                });
+      document
+        .getElementById("encryptForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          let formData = new FormData();
+          formData.append(
+            "image",
+            document.getElementById("encryptImage").files[0]
+          );
+          formData.append("message", document.getElementById("message").value);
+          formData.append(
+            "password",
+            document.getElementById("encryptPassword").value
+          );
+
+          fetch("https://stegnography-nivesh.onrender.com/encrypt", {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.status === "success") {
+                let img = document.getElementById("encryptedImage");
+                img.src = data.encrypted_image; // Use the full URL returned from the backend
+                img.style.display = "block";
+              } else {
+                alert("Encryption failed!");
+              }
+            });
         });
-    
-        document.getElementById("decryptForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-            let formData = new FormData();
-            formData.append("image", document.getElementById("decryptImage").files[0]);
-            formData.append("password", document.getElementById("decryptPassword").value);
-    
-            fetch("https://stegnography-nivesh.onrender.com/decrypt", { method: "POST", body: formData })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === "success") {
-                        document.getElementById("decryptedMessage").innerText = "Decrypted Message: " + data.message;
-                    } else {
-                        alert("Decryption failed!");
-                    }
-                });
+
+      document
+        .getElementById("decryptForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          let formData = new FormData();
+          formData.append(
+            "image",
+            document.getElementById("decryptImage").files[0]
+          );
+          formData.append(
+            "password",
+            document.getElementById("decryptPassword").value
+          );
+
+          fetch("https://stegnography-nivesh.onrender.com/decrypt", {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.status === "success") {
+                document.getElementById("decryptedMessage").innerText =
+                  "Decrypted Message: " + data.message;
+              } else {
+                alert("Decryption failed!");
+              }
+            });
         });
     </script>
-    
-
-</body>
+  </body>
 </html>

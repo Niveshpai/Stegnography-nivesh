@@ -80,19 +80,12 @@ def encrypt():
 
     if image:
         image_path = "static/uploaded.png"
-        try:
-            image.save(image_path)
-            logging.debug(f"Image saved at {image_path}")
-        except Exception as e:
-            logging.error(f"Error saving image: {e}")
-            return {"status": "error", "message": "Failed to save image"}
-
+        image.save(image_path)
         encrypted_path = encrypt_image(image_path, message, password)
         if encrypted_path:
-            logging.debug(f"Encrypted image saved at {encrypted_path}")
-            return {"status": "success", "encrypted_image": encrypted_path}
+            encrypted_image_url = f"https://stegnography-nivesh.onrender.com/static/encrypted.png"
+            return {"status": "success", "encrypted_image": encrypted_image_url}
         else:
-            logging.error("Encryption failed")
             return {"status": "error", "message": "Encryption failed"}
 
 @app.route("/decrypt", methods=["POST"])
