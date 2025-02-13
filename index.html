@@ -85,8 +85,9 @@
             .then((response) => response.json())
             .then((data) => {
               if (data.status === "success") {
-                let img = document.getElementById("encryptedImage");
-                img.src = data.encrypted_image; // Use the full URL returned from the backend
+                let encryptedImageUrl =
+                  "https://https://stegnography-nivesh.onrender.com/static/encrypted.png";
+                img.src = encryptedImageUrl;
                 img.style.display = "block";
               } else {
                 alert("Encryption failed!");

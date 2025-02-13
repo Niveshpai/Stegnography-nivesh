@@ -3,7 +3,8 @@ from flask_cors import CORS
 import cv2
 
 app = Flask(__name__, static_folder="static", template_folder=".")
-CORS(app, resources={r"/*": {"origins": "https://niveshpai.github.io"}})  # Allow only GitHub Pages domain
+CORS(app, resources={r"/*": {"origins": "https://niveshpai.github.io"}})
+
 
 # Character encoding dictionaries
 d = {chr(i): i for i in range(255)}
@@ -33,6 +34,7 @@ def encrypt_image(image_path, message, password):
         z = (z + 1) % 3
 
     encrypted_path = "static/encrypted.png"
+    print(f"Encrypted image saved to: {encrypted_path}")
     cv2.imwrite(encrypted_path, img)
     return encrypted_path
 
@@ -78,6 +80,7 @@ def encrypt():
         image.save(image_path)
         encrypted_path = encrypt_image(image_path, message, password)
         if encrypted_path:
+            print(f"Encrypted image available at: {encrypted_path}")
             encrypted_image_url = f"https://stegnography-nivesh.onrender.com/static/encrypted.png"
             return {"status": "success", "encrypted_image": encrypted_image_url}
         else:
