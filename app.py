@@ -1,10 +1,7 @@
 from flask import Flask, render_template, request
-from flask_cors import CORS
 import cv2
 
 app = Flask(__name__, static_folder="static", template_folder=".")
-CORS(app, resources={r"/*": {"origins": "https://niveshpai.github.io"}})
-
 
 # Character encoding dictionaries
 d = {chr(i): i for i in range(255)}
@@ -34,7 +31,6 @@ def encrypt_image(image_path, message, password):
         z = (z + 1) % 3
 
     encrypted_path = "static/encrypted.png"
-    print(f"Encrypted image saved to: {encrypted_path}")
     cv2.imwrite(encrypted_path, img)
     return encrypted_path
 
@@ -69,6 +65,10 @@ def decrypt_image(image_path, entered_password):
     return secret_message
 
 
+@app.route("/")
+def index():
+    return render_template("index.html")
+
 @app.route("/encrypt", methods=["POST"])
 def encrypt():
     image = request.files["image"]
@@ -80,11 +80,9 @@ def encrypt():
         image.save(image_path)
         encrypted_path = encrypt_image(image_path, message, password)
         if encrypted_path:
-            print(f"Encrypted image available at: {encrypted_path}")
-            encrypted_image_url = f"https://stegnography-nivesh.onrender.com/static/encrypted.png"
-            return {"status": "success", "encrypted_image": encrypted_image_url}
-        else:
-            return {"status": "error", "message": "Encryption failed"}
+            return {"status": "success", "encrypted_image": encrypted_path}
+    
+    return {"status": "error", "message": "Encryption failed"}
 
 @app.route("/decrypt", methods=["POST"])
 def decrypt():

@@ -42,12 +42,7 @@
       /><br />
       <button type="submit">Encrypt</button>
     </form>
-    <img
-      id="encryptedImage"
-      src="{{ url_for('static', filename='encrypted.png') }}"
-      alt="Encrypted Image"
-      style="display: none"
-    />
+    <img id="encryptedImage" style="display: none" alt="Encrypted Image" />
 
     <h3>Decrypt Message</h3>
     <form id="decryptForm">
@@ -78,16 +73,12 @@
             document.getElementById("encryptPassword").value
           );
 
-          fetch("https://stegnography-nivesh.onrender.com/encrypt", {
-            method: "POST",
-            body: formData,
-          })
+          fetch("/encrypt", { method: "POST", body: formData })
             .then((response) => response.json())
             .then((data) => {
               if (data.status === "success") {
-                let encryptedImageUrl =
-                  "https://https://stegnography-nivesh.onrender.com/static/encrypted.png";
-                img.src = encryptedImageUrl;
+                let img = document.getElementById("encryptedImage");
+                img.src = data.encrypted_image;
                 img.style.display = "block";
               } else {
                 alert("Encryption failed!");
@@ -109,10 +100,7 @@
             document.getElementById("decryptPassword").value
           );
 
-          fetch("https://stegnography-nivesh.onrender.com/decrypt", {
-            method: "POST",
-            body: formData,
-          })
+          fetch("/decrypt", { method: "POST", body: formData })
             .then((response) => response.json())
             .then((data) => {
               if (data.status === "success") {
