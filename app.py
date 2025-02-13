@@ -1,27 +1,31 @@
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request
 import cv2
-import numpy as np
-import os
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
 
-# Dictionary for encoding and decoding characters
+# Character encoding dictionaries
 d = {chr(i): i for i in range(255)}
 c = {i: chr(i) for i in range(255)}
+
+# Delimiter to mark the end of the message
+END_MARKER = "###END###"
 
 def encrypt_image(image_path, message, password):
     img = cv2.imread(image_path)
     if img is None:
         return None
 
+    # Store the password inside the image along with the secret message
+    full_message = password + "|" + message + END_MARKER  
+
     height, width, _ = img.shape
     n, m, z = 0, 0, 0
 
-    if len(message) > width * height:
-        return None  # Message is too large
+    if len(full_message) > width * height:
+        return None  # Message is too large for the image
 
-    for i in range(len(message)):
-        img[n, m, z] = d[message[i]]
+    for i in range(len(full_message)):
+        img[n, m, z] = d[full_message[i]]
         n += 1
         m += 1
         z = (z + 1) % 3
@@ -30,21 +34,36 @@ def encrypt_image(image_path, message, password):
     cv2.imwrite(encrypted_path, img)
     return encrypted_path
 
-def decrypt_image(image_path, message_length, password):
+def decrypt_image(image_path, entered_password):
     img = cv2.imread(image_path)
     if img is None:
-        return None
+        return "Decryption failed"
 
     n, m, z = 0, 0, 0
-    message = ""
+    extracted_data = ""
 
-    for i in range(message_length):
-        message += c[img[n, m, z]]
+    while True:
+        char = c[img[n, m, z]]
+        if extracted_data.endswith(END_MARKER):  
+            extracted_data = extracted_data.replace(END_MARKER, "")
+            break
+        extracted_data += char
         n += 1
         m += 1
         z = (z + 1) % 3
 
-    return message
+    # Ensure extracted data contains "|"
+    if "|" not in extracted_data:
+        return "Decryption failed"
+
+    stored_password, secret_message = extracted_data.split("|", 1)
+
+    # Check if entered password matches the stored one
+    if entered_password != stored_password:
+        return "Not authorized"
+
+    return secret_message
+
 
 @app.route("/")
 def index():
@@ -68,13 +87,13 @@ def encrypt():
 @app.route("/decrypt", methods=["POST"])
 def decrypt():
     image = request.files["image"]
-    message_length = int(request.form["length"])
     password = request.form["password"]
 
     if image:
         image_path = "static/decrypt.png"
         image.save(image_path)
-        decrypted_message = decrypt_image(image_path, message_length, password)
+        decrypted_message = decrypt_image(image_path, password)
+        
         if decrypted_message:
             return {"status": "success", "message": decrypted_message}
 

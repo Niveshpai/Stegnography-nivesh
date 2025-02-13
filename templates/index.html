@@ -26,7 +26,6 @@
     <h3>Decrypt Message</h3>
     <form id="decryptForm">
         <input type="file" id="decryptImage" required><br>
-        <input type="number" id="length" placeholder="Message length" required><br>
         <input type="password" id="decryptPassword" placeholder="Enter password" required><br>
         <button type="submit">Decrypt</button>
     </form>
@@ -57,7 +56,6 @@
             event.preventDefault();
             let formData = new FormData();
             formData.append("image", document.getElementById("decryptImage").files[0]);
-            formData.append("length", document.getElementById("length").value);
             formData.append("password", document.getElementById("decryptPassword").value);
 
             fetch("/decrypt", { method: "POST", body: formData })
