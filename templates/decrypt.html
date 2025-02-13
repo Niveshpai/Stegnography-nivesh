@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decrypt Image</title>
+</head>
+<body>
+    <h1>Decrypt Image</h1>
+    <img src="{{ url_for('static', filename='encrypted_images/' + filename) }}" alt="Encrypted Image">
+    <form action="/decrypt" method="POST">
+        <input type="hidden" name="filename" value="{{ filename }}">
+        <input type="hidden" name="password" value="{{ password }}">
+        
+        <label for="entered_passcode">Enter Passcode to Decrypt:</label>
+        <input type="password" name="entered_passcode" required><br><br>
+
+        <button type="submit">Decrypt</button>
+    </form>
+</body>
+</html>
