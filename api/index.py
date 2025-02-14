@@ -1,15 +1,8 @@
 from flask import Flask, render_template, request
 import cv2
-import os
 import base64
 
-print("Static Directory Exists:", os.path.exists("static"))
-print("Encrypted Image Exists:", os.path.exists("static/encrypted.png"))
-
-
-
-
-app = Flask(__name__, static_folder="../static", template_folder="../templates")
+app = Flask(__name__, static_folder="static", template_folder="../templates")
 
 # Character encoding dictionaries
 d = {chr(i): i for i in range(255)}
