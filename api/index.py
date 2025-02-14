@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 import cv2
 import os
+import base64
 
 print("Static Directory Exists:", os.path.exists("static"))
 print("Encrypted Image Exists:", os.path.exists("static/encrypted.png"))
@@ -71,6 +72,11 @@ def decrypt_image(image_path, entered_password):
 
     return secret_message
 
+def encode_image_base64(image_path):
+    with open(image_path, "rb") as image_file:
+        # Read the image file and encode it in base64
+        encoded_string = base64.b64encode(image_file.read()).decode("utf-8")
+    return encoded_string
 
 @app.route("/")
 def index():
@@ -86,8 +92,11 @@ def encrypt():
         image_path = "static/uploaded.png"
         image.save(image_path)
         encrypted_path = encrypt_image(image_path, message, password)
+
         if encrypted_path:
-            return {"status": "success", "encrypted_image": encrypted_path}
+            # Encode the encrypted image to base64
+            encoded_image = encode_image_base64(encrypted_path)
+            return {"status": "success", "encrypted_image": encoded_image}
     
     return {"status": "error", "message": "Encryption failed"}
 
