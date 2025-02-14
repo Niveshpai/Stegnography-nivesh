@@ -69,6 +69,7 @@ def decrypt_image(image_path, entered_password):
 def index():
     return render_template("index.html")
 
+
 @app.route("/encrypt", methods=["POST"])
 def encrypt():
     image = request.files["image"]
