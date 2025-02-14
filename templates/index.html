@@ -78,7 +78,7 @@
             .then((data) => {
               if (data.status === "success") {
                 let img = document.getElementById("encryptedImage");
-                img.src = data.encrypted_image;
+                img.src = "data:image/png;base64," + data.encrypted_image;
                 img.style.display = "block";
               } else {
                 alert("Encryption failed!");
