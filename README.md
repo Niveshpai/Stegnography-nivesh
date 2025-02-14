@@ -50,9 +50,7 @@ This project is a web-based steganography application that allows users to secur
 
 ## Deployment
 This project is configured for deployment on **Vercel**. To deploy:
-```sh
-vercel dev
-```
+[Vercel](http://vercel.com/)
 Follow the on-screen instructions to deploy successfully.
 
 
