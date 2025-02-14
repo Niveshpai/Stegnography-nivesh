@@ -1,3 +1,13 @@
 {
+  "builds": [
+    {
+      "src": "app.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "static/**",
+      "use": "@vercel/static"
+    }
+  ],
   "rewrites": [{ "source": "/(.*)", "destination": "/api/index" }]
 }
