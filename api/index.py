@@ -1,7 +1,14 @@
 from flask import Flask, render_template, request
 import cv2
+import os
 
-app = Flask(__name__, static_folder="static", template_folder=".")
+print("Static Directory Exists:", os.path.exists("static"))
+print("Encrypted Image Exists:", os.path.exists("static/encrypted.png"))
+
+
+
+
+app = Flask(__name__, static_folder="../static", template_folder="../templates")
 
 # Character encoding dictionaries
 d = {chr(i): i for i in range(255)}
@@ -68,7 +75,6 @@ def decrypt_image(image_path, entered_password):
 @app.route("/")
 def index():
     return render_template("index.html")
-
 
 @app.route("/encrypt", methods=["POST"])
 def encrypt():
