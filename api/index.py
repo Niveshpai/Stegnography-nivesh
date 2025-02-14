@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 import cv2
 import base64
 
-app = Flask(__name__, static_folder=".", template_folder="../templates")
+app = Flask(__name__, static_folder="static", template_folder="../templates")
 
 # Character encoding dictionaries
 d = {chr(i): i for i in range(255)}
@@ -31,7 +31,7 @@ def encrypt_image(image_path, message, password):
         m += 1
         z = (z + 1) % 3
 
-    encrypted_path = "encrypted.png"
+    encrypted_path = "static/encrypted.png"
     cv2.imwrite(encrypted_path, img)
     return encrypted_path
 
@@ -82,7 +82,7 @@ def encrypt():
     password = request.form["password"]
 
     if image:
-        image_path = "uploaded.png"
+        image_path = "static/uploaded.png"
         image.save(image_path)
         encrypted_path = encrypt_image(image_path, message, password)
 
@@ -99,7 +99,7 @@ def decrypt():
     password = request.form["password"]
 
     if image:
-        image_path = "decrypt.png"
+        image_path = "static/decrypt.png"
         image.save(image_path)
         decrypted_message = decrypt_image(image_path, password)
         
