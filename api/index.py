@@ -7,7 +7,7 @@ app = Flask(__name__, static_folder="temp", template_folder="../templates")
 
 @app.route('/favicon.ico')
 def favicon():
-    return send_from_directory(os.path.abspath(app.template_folder), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
+    return send_from_directory(os.path.join(app.root_path, '../templates'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 # Character encoding dictionaries
 d = {chr(i): i for i in range(255)}
