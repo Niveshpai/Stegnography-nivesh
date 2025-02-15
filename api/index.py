@@ -1,8 +1,13 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
 import cv2
+import os
 import base64
 
 app = Flask(__name__, static_folder="temp", template_folder="../templates")
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.abspath(app.template_folder), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 # Character encoding dictionaries
 d = {chr(i): i for i in range(255)}
@@ -82,7 +87,7 @@ def encrypt():
     password = request.form["password"]
 
     if image:
-        image_path = "/tmp/uploaded.png"  # ✅ Save image in /tmp/
+        image_path = "/tmp/uploaded.png"  # Save image in /tmp/
         image.save(image_path)
         encrypted_path = encrypt_image(image_path, message, password)
 
