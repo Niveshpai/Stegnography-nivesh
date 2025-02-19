@@ -34,8 +34,8 @@ This project is a web-based steganography application that allows users to secur
 ### Setup
 1. **Clone the repository**
    ```sh
-   git clone https://github.com/yourusername/image-steganography.git
-   cd image-steganography
+   git clone https://github.com/Niveshpai/Stegnography-nivesh.git
+   cd Stegnography-nivesh
    ```
 2. **Install dependencies**
    ```sh
